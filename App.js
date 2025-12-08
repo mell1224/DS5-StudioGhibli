@@ -24,7 +24,7 @@ const apiConfig = {
     "Personajes.html": {
         url: "https://ghibliapi.vercel.app/people",
         titleKey: "name",
-        imageKey: "null" // Se asignará dinámicamente
+        imageKey: null // Se asignará dinámicamente
     },
     "Localizaciones.html": {
         url: "https://ghibliapi.vercel.app/locations",
@@ -50,17 +50,23 @@ if (!apiConfig[page]) {
 // Obtener datos desde API
 async function loadData() {
     const config = apiConfig[page];
+    if(!config){
+        console.warn("Página no registrada en App.js");
+        return;
+    }
 
     try {
-        const response = await fetch(config.url);
-        const data = await response.json();
-        // Nuevo bloque para obtener el mapa de imágenes
-        let imageMap = null;
-        if (page === "Personajes.html") {
-            const imgRes = await fetch(PERSON_IMAGES_URL);    // ./personajes-imagenes-por-id.json
-            const imgJson = await imgRes.json();              // { images: { "<id>": "https://..." } }
-            imageMap = imgJson.images || null;
-        }
+    const response = await fetch(config.url);
+    const data = await response.json();
+    
+    // Mapa de imágenes solo para Personajes
+    let imageMap = null;
+    if (page === "Personajes.html") {
+      const imgRes = await fetch(PERSON_IMAGES_URL); // ./personajes-imagenes-por-id.json
+      const imgJson = await imgRes.json();           // { images: { "<id>": "https://..." } }
+      imageMap = imgJson?.images || null;
+    }
+
         
          // Guardar películas SOLO si estamos en Peliculas.html
         if (page === "Peliculas.html") {
@@ -75,26 +81,43 @@ async function loadData() {
 }
 
 // Renderizar tarjetas
-function renderCards(data, config) {
+const NOT_FOUND_IMG = "not-found.jpg"; // centraliza el fallback
+function renderCards(data, config,imageMap) {
     container.innerHTML = "";
 
     // Recorre cada item de "data"
     data.forEach(item => {
         // Saca el título según la clave
         const title = item[config.titleKey];
-        const image = config.imageKey ? item[config.imageKey] : "not-found.jpg"; // Imagen opcional
+        
+// Elegir imagen según la página
+    let imageSrc = NOT_FOUND_IMG;
+    if (page === "Personajes.html" && imageMap) {
+      imageSrc = imageMap[item.id] || NOT_FOUND_IMG;
+    } else if (config.imageKey) {
+      imageSrc = item[config.imageKey] || NOT_FOUND_IMG;
+    }
 
         const card = document.createElement("div");
         card.classList.add("card");
 
         card.innerHTML = `
-            <img src="${image}" alt="${title}">
+            <img src="${imageSrc}" alt="${title}">
             <h2>${title}</h2>
         `;
         //Crear el Evento de Clik de las Tarjetas
-        card.addEventListener("click", () => {
-            window.location.href = `PeliculaDetalle.html?id=${item.id}`;
-        });
+       
+if (page === "Peliculas.html" && config.detailPage) {
+      card.addEventListener("click", () => {
+        window.location.href = `${config.detailPage}?id=${item.id}`;
+      });
+    }
+// CLICK: Personajes → detalle de personaje
+if (page === "Personajes.html") {
+      card.addEventListener("click", () => {
+        window.location.href = `PersonajeDetalle.html?id=${item.id}`;
+      });
+    }
         container.appendChild(card);
     });
 }
@@ -149,7 +172,7 @@ function aplicarFiltros() {
         return valor.includes(texto);
     });
 
-    renderCards(filtradas, apiConfig["Peliculas.html"]);
+    renderCards(filtradas, apiConfig["Peliculas.html"], null);
     
 }
 // Sirve para Oculatr los Filtros 
