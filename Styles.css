@@ -285,6 +285,23 @@ body {
     font-size: 22px;
 
 }
+/*Detalles Personajes parte de la peli a le que pertenecen*/
+.detalle-info h2 {
+  font-size: 28px;
+  color: rgb(7, 46, 105);
+  margin-top: 20px;
+}
+
+.detalle-info ul {
+  list-style: disc;
+  padding-left: 20px;
+ color: rgb(7, 46, 105);
+  font-size: 22px;
+}
+
+
+
+
 
 .volver-btn {
     margin-top: 20px;

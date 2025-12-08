@@ -27,8 +27,12 @@ async function loadPersonDetail() {
     let imgSrc = NOT_FOUND_IMG;
     try {
       const imgRes = await fetch(PERSON_IMAGES_URL);
+      if(imgRes.ok){
       const imgJson = await imgRes.json();
-      imgSrc = (imgJson?.images && imgJson.images[personajeId]) ? imgJson.images[personajeId] : imgSrc;
+        if(imgJson?.images && imgJson.images[personajeId]){
+          imgSrc = imgJson.images[personajeId];
+        }
+    }
     } catch (e) {
       console.warn("No se pudo cargar el mapa de imágenes, usando fallback:", e);
     }
@@ -87,7 +91,7 @@ function renderPersonDetail(person, imgSrc, filmTitles, speciesName) {
 
   container.innerHTML = `
     <div class="detalle-card">
-      ${imgSrc}
+      <img src="${imgSrc}" alt="${name}" class="detalle-img">
       <div class="detalle-info">
         <h1>${name}</h1>
         <p><strong>Género:</strong> ${gender}</p>
