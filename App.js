@@ -40,11 +40,7 @@ const apiConfig = {
 
 // Ruta del JSON (como está en la misma carpeta, usa ruta relativa)
 const PERSON_IMAGES_URL = "./personajes-imagenes-por-id.json";
-<<<<<<< Updated upstream
-const LOCATION_IMAGES_URL = "./Localizacion-img-id.json"; // nombre real del fichero
-=======
 const LOCATION_IMAGES_URL = "./Localizacion-img-id.json"; 
->>>>>>> Stashed changes
 
 // condicional por si no tiene pagina registrada
 if (!apiConfig[page]) {

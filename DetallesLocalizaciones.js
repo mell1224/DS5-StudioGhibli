@@ -77,7 +77,7 @@ function renderLocationDetail(loc, imgSrc, filmTitles) {
 
   container.innerHTML = `
     <div class="detalle-card">
-      <img id="detalle-img" src="${imgSrc}" alt="${name}" class="detalle-img" onerror="this.onerror=null;this.src='${NOT_FOUND_IMG}';console.warn('Imagen remota no cargada: ${imgSrc}');">
+      <img src="${imgSrc}" alt="${name}" class="detalle-img">
 
       <div class="detalle-info">
         <h1>${name}</h1>
@@ -88,7 +88,6 @@ function renderLocationDetail(loc, imgSrc, filmTitles) {
         <h2>Películas donde aparece</h2>
         ${filmsHTML}
 
-        <p class="img-url">URL imagen: ${imgSrc}</p>
         <button id="volverBtn" class="volver-btn">⬅ Volver</button>
       </div>
     </div>
