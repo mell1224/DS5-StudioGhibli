@@ -167,7 +167,7 @@ function renderCards(data, config, imageMap) {
 
         // Elegir imagen según la página 
         let imageSrc = NOT_FOUND_IMG;
-
+//Agregar las demás cargas de imagenes de localización 
         if (page === "Personajes.html") {
             // usar el imageMap que nos llega, o el global si es re-render
             const mapToUse = imageMap || peopleImageMap; // NUEVO
@@ -215,6 +215,8 @@ function renderCards(data, config, imageMap) {
                 window.location.href = `PersonajeDetalle.html?id=${item.id}`; // NUEVO
             });
         }
+
+        //Agregar el if del eevento click de locaciones
 
         container.appendChild(card);
     });
@@ -288,18 +290,6 @@ function aplicarFiltros() {
         // IMPORTANTE: re-render con el imageMap global para que no se pierdan imágenes
         renderCards(filtradas, apiConfig["Personajes.html"], peopleImageMap); // NUEVO
     }
-    //para Barra de Busqueda de 
-     if (page === "Localizaciones.html") {
-        // SIN filtro especial: usar el buscador por título
-        if (filtroEspecial === null) {
-            const cards = document.querySelectorAll(".card");
-            cards.forEach(card => {
-                const title = card.querySelector("h2").textContent.toLowerCase();
-                card.style.display = title.includes(texto) ? "block" : "none";
-            });
-            return;
-        }
-    }    
 }
 
 // Sirve para Oculatr los Filtros 
@@ -313,7 +303,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-    // Boton Instagram
+// Boton Instagram
     const btnIG = document.getElementById("btnIG");
 
     btnIG.addEventListener("click", () => {
