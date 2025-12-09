@@ -40,7 +40,7 @@ const apiConfig = {
 
 // Ruta del JSON (como está en la misma carpeta, usa ruta relativa)
 const PERSON_IMAGES_URL = "./personajes-imagenes-por-id.json";
-
+const LOCATION_IMAGES_URL = "./Localizacion-img-id.json"; // nombre real del fichero
 
 // condicional por si no tiene pagina registrada
 if (!apiConfig[page]) {
@@ -66,7 +66,11 @@ async function loadData() {
       const imgJson = await imgRes.json();           // { images: { "<id>": "https://..." } }
       imageMap = imgJson?.images || null;
     }
-
+    if (page === "Localizaciones.html") {
+        const imgRes = await fetch(LOCATION_IMAGES_URL); // ./personajes-imagenes-por-id.json
+        const imgJson = await imgRes.json();           // { images: { "<id>": "https://..." } }
+      imageMap = imgJson?.images || null;
+    }
         
          // Guardar películas SOLO si estamos en Peliculas.html
         if (page === "Peliculas.html") {
@@ -81,8 +85,12 @@ async function loadData() {
 }
 
 // Renderizar tarjetas
-const NOT_FOUND_IMG = "not-found.jpg"; // centraliza el fallback
+const NOT_FOUND_IMG = "Logo.png"; // usar logo como fallback si no existe not-found.jpg
 function renderCards(data, config,imageMap) {
+    if (!container) {
+        console.error("Contenedor no encontrado para la página:", page);
+        return;
+    }
     container.innerHTML = "";
 
     // Recorre cada item de "data"
@@ -94,9 +102,13 @@ function renderCards(data, config,imageMap) {
     let imageSrc = NOT_FOUND_IMG;
     if (page === "Personajes.html" && imageMap) {
       imageSrc = imageMap[item.id] || NOT_FOUND_IMG;
-    } else if (config.imageKey) {
-      imageSrc = item[config.imageKey] || NOT_FOUND_IMG;
     }
+    else if (page ==="Localizaciones.html" && imageMap) {
+    imageSrc = imageMap[item.id] || NOT_FOUND_IMG;
+    }
+     else if (config.imageKey) {
+    imageSrc = item[config.imageKey] || NOT_FOUND_IMG;
+}
 
         const card = document.createElement("div");
         card.classList.add("card");
@@ -105,23 +117,33 @@ function renderCards(data, config,imageMap) {
             <img src="${imageSrc}" alt="${title}">
             <h2>${title}</h2>
         `;
-        //Crear el Evento de Clik de las Tarjetas
-       
-if (page === "Peliculas.html" && config.detailPage) {
-      card.addEventListener("click", () => {
-        window.location.href = `${config.detailPage}?id=${item.id}`;
-      });
-    }
-// CLICK: Personajes → detalle de personaje
-if (page === "Personajes.html") {
-      card.addEventListener("click", () => {
-        window.location.href = `PersonajeDetalle.html?id=${item.id}`;
-      });
-    }
+                //Crear el Evento de Click de las Tarjetas
+
+        if (page === "Peliculas.html" && config.detailPage) {
+            card.addEventListener("click", () => {
+                window.location.href = `${config.detailPage}?id=${item.id}`;
+            });
+        }
+
+        // CLICK: Personajes → detalle de personaje
+        if (page === "Personajes.html") {
+            card.addEventListener("click", () => {
+                window.location.href = `PersonajeDetalle.html?id=${item.id}`;
+            });
+        }
+
+        // CLICK: Localizaciones → detalle de localización
+        if (page === "Localizaciones.html") {
+            card.addEventListener("click", () => {
+                window.location.href = `LocalizacionDetalle.html?id=${item.id}`;
+            });
+        }
+
         container.appendChild(card);
     });
 }
 let filtroEspecial = null; // null = no usar filtro especial (usa el general)
+
 
 if (page === "Peliculas.html" && tipoFiltro) {
 
