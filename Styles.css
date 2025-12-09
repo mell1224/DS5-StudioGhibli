@@ -244,6 +244,12 @@ body {
 .oculto {
     display: none;
 }
+#btnIG{
+    cursor: pointer;
+}
+#btnGL{
+    cursor: pointer;
+}
 /*Detalles Peliculas*/
 #detalle-container {
     display: flex;

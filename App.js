@@ -288,6 +288,18 @@ function aplicarFiltros() {
         // IMPORTANTE: re-render con el imageMap global para que no se pierdan imágenes
         renderCards(filtradas, apiConfig["Personajes.html"], peopleImageMap); // NUEVO
     }
+    //para Barra de Busqueda de 
+     if (page === "Localizaciones.html") {
+        // SIN filtro especial: usar el buscador por título
+        if (filtroEspecial === null) {
+            const cards = document.querySelectorAll(".card");
+            cards.forEach(card => {
+                const title = card.querySelector("h2").textContent.toLowerCase();
+                card.style.display = title.includes(texto) ? "block" : "none";
+            });
+            return;
+        }
+    }    
 }
 
 // Sirve para Oculatr los Filtros 
@@ -300,3 +312,16 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 });
+
+    // Boton Instagram
+    const btnIG = document.getElementById("btnIG");
+
+    btnIG.addEventListener("click", () => {
+        window.open("https://www.instagram.com/studioghibli_ds5?igsh=aHl6bjNjcHgxaXI%3D&utm_source=qr", "_blank");
+    });
+    // Boton Google
+    const btnGL = document.getElementById("btnGL");
+
+    btnGL.addEventListener("click", () => {
+        window.open("https://www.google.com", "_blank");
+    });
