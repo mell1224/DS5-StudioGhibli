@@ -16,7 +16,7 @@ function generarNombreAnonimo() {
     return `Anónimo#${numero}`;
 }
 
-// 5) Cargargo detalle de la película (API Ghibli)
+// 5) Carga detalle de la película (API Ghibli)
 async function loadMovieDetail() {
     if (!peliculaId) {
         container && (container.innerHTML = "<p>ID de película no proporcionado.</p>");
